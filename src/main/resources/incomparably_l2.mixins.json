@@ -1,0 +1,19 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "net.dice7000.incomparablyl2.mixin.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "incomparably_l2.refmap.json",
+  "mixins": [
+    "HLSpecialCodeForFEMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "plugin": "net.dice7000.incomparablyl2.mixin.IL2MixinPlugin"
+}
