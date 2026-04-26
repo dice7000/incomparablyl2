@@ -6,8 +6,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.LivingEntity;
 
 public class RunicShieldTrait extends IL2Trait {
-    public RunicShieldTrait(ChatFormatting format) {
-        super(format);
+    public RunicShieldTrait() {
+        super(ChatFormatting.LIGHT_PURPLE);
     }
 
     @Override public void tick(LivingEntity mob, int level) {

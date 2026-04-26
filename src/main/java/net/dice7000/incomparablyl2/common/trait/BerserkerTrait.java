@@ -9,8 +9,8 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class BerserkerTrait extends IL2Trait {
-    public BerserkerTrait(ChatFormatting format) {
-        super(format);
+    public BerserkerTrait() {
+        super(ChatFormatting.RED);
     }
 
     double health; double damage; double armor; double speed;

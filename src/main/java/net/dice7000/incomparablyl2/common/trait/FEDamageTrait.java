@@ -8,8 +8,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.LivingEntity;
 
 public class FEDamageTrait extends IL2Trait {
-    public FEDamageTrait(ChatFormatting format) {
-        super(format);
+    public FEDamageTrait() {
+        super(ChatFormatting.LIGHT_PURPLE);
     }
 
     @Override public void onHurtTarget(int level, LivingEntity attacker, AttackCache cache, TraitEffectCache traitCache) {

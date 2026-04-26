@@ -125,7 +125,7 @@ dependencies {
     implementation fg.deobf("curse.maven:Mekanism-268560:6552911")
     implementation fg.deobf("curse.maven:TrialMonolith-1462850:7859632")
     implementation fg.deobf("curse.maven:NoSugar-1476611:7879031")
-    //implementation fg.deobf("curse.maven:hyperlink-1274604:7052766")
+    implementation fg.deobf("curse.maven:hyperlink-1274604:7052766")
 
     implementation fg.deobf("blank:Hyperlink:3.0.4")
 

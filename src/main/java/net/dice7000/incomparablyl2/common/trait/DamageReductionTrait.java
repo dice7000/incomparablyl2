@@ -5,8 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class DamageReductionTrait extends IL2Trait {
-    public DamageReductionTrait(ChatFormatting format) {
-        super(format);
+    public DamageReductionTrait() {
+        super(ChatFormatting.YELLOW);
     }
 
     @Override public void onHurtByOthers(int level, LivingEntity entity, LivingHurtEvent event) {

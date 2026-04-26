@@ -7,8 +7,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class PiercesShieldTrait extends IL2Trait {
-    public PiercesShieldTrait(ChatFormatting format) {
-        super(format);
+    public PiercesShieldTrait() {
+        super(ChatFormatting.GREEN);
     }
 
     @Override
