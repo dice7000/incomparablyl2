@@ -1,25 +1,25 @@
-package net.dice7000.incomparablyl2.common.trait;
+package net.dice7000.incomparablyl2.trait;
 
 import dev.xkmc.l2damagetracker.contents.attack.AttackCache;
 import dev.xkmc.l2hostility.content.logic.TraitEffectCache;
+import dev.xkmc.l2hostility.content.traits.base.MobTrait;
 import mekanism.common.capabilities.Capabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public class RadioActiveTrait extends IL2Trait {
+public class RadioActiveTrait extends MobTrait {
     public RadioActiveTrait() {
         super(ChatFormatting.GREEN);
     }
 
-    @Override public void onHurtTarget(int level, LivingEntity attacker, AttackCache cache, TraitEffectCache traitCache) {
+    @Override public void onHurtTarget(int level, @NotNull LivingEntity attacker, @NotNull AttackCache cache, @NotNull TraitEffectCache traitCache) {
         super.onHurtTarget(level, attacker, cache, traitCache);
 
-        LivingEntity target = Objects.requireNonNull(cache.getLivingAttackEvent()).getEntity();
+        LivingEntity target = cache.getAttackTarget();
         if (target.equals(attacker)) return;
 
         double radiation; double valueRand; double limitRand;
@@ -33,10 +33,8 @@ public class RadioActiveTrait extends IL2Trait {
         target.getCapability(Capabilities.RADIATION_ENTITY, null).ifPresent(iRadiationEntity -> iRadiationEntity.set(radiation));
     }
 
-    @Override public void onDeath(int level, LivingEntity entity, LivingDeathEvent event) {
+    @Override public void onDeath(int level, @NotNull LivingEntity entity, @NotNull LivingDeathEvent event) {
         super.onDeath(level, entity, event);
-
-        if (Math.random() >= 0.3) return;
-        entity.level().explode(entity, entity.getX(), entity.getY(), entity.getZ(), 3.0F, Level.ExplosionInteraction.MOB);
+        if (Math.random() < 0.3) entity.level().explode(entity, entity.getX(), entity.getY(), entity.getZ(), 3.0F, Level.ExplosionInteraction.MOB);
     }
 }
