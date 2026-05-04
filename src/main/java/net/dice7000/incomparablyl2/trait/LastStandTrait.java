@@ -37,6 +37,7 @@ public class LastStandTrait extends MobTrait {
 
         int cooldown = CooldownData.get(entity);
         double rand = entity.getType().is(IncomparablyL2.FORGE_BOSSES) ? 1.0 : Math.random();
+        if (cooldown <= -10000) return;
         if (entity.isDeadOrDying() && cooldown <= 0 && rand <= 0.2) {
             if (!entity.level().isClientSide) {
                 entity.level().playSound(entity, BlockPos.containing(entity.position()),
@@ -53,16 +54,16 @@ public class LastStandTrait extends MobTrait {
         private static final Map<LivingEntity, AtomicInteger> hasCooldownEntities = new HashMap<>();
 
         public static void define(LivingEntity entity) {
-            hasCooldownEntities.put(entity, new AtomicInteger(0));
+            if (entity != null) hasCooldownEntities.put(entity, new AtomicInteger(0));
         }
         public static void set(LivingEntity entity, int cooldown) {
-            hasCooldownEntities.get(entity).set(cooldown);
+            if (entity != null) hasCooldownEntities.get(entity).set(cooldown);
         }
         public static int get(LivingEntity entity) {
-            return hasCooldownEntities.get(entity).get();
+            return entity != null ? hasCooldownEntities.get(entity).get() : -20000;
         }
         public static void decrement(LivingEntity entity) {
-            set(entity, get(entity) - 1);
+            if (entity != null) hasCooldownEntities.get(entity).decrementAndGet();
         }
     }
 }
