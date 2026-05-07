@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public class LastStandTrait extends MobTrait {
     public LastStandTrait() {
@@ -22,14 +23,12 @@ public class LastStandTrait extends MobTrait {
 
     @Override public void initialize(@NotNull LivingEntity mob, int level) {
         super.initialize(mob, level);
-        CooldownData.define(mob);
+        if (!mob.level().isClientSide) CooldownData.define(mob);
     }
 
     @Override public void tick(@NotNull LivingEntity mob, int level) {
         super.tick(mob, level);
-        if (CooldownData.get(mob) > 0) {
-            CooldownData.decrement(mob);
-        }
+        if (CooldownData.get(mob) > 0 && !mob.level().isClientSide) CooldownData.decrement(mob);
     }
 
     @Override public void onDeath(int level, @NotNull LivingEntity entity, @NotNull LivingDeathEvent event) {
@@ -37,8 +36,7 @@ public class LastStandTrait extends MobTrait {
 
         int cooldown = CooldownData.get(entity);
         double rand = entity.getType().is(IncomparablyL2.FORGE_BOSSES) ? 1.0 : Math.random();
-        if (cooldown <= -10000) return;
-        if (entity.isDeadOrDying() && cooldown <= 0 && rand <= 0.2) {
+        if (entity.isDeadOrDying() && cooldown == 0 && rand <= 0.2) {
             if (!entity.level().isClientSide) {
                 entity.level().playSound(entity, BlockPos.containing(entity.position()),
                         SoundEvents.PLAYER_LEVELUP, SoundSource.HOSTILE, 3.0F, 0.8F);
@@ -51,19 +49,25 @@ public class LastStandTrait extends MobTrait {
     }
 
     public static class CooldownData {
-        private static final Map<LivingEntity, AtomicInteger> hasCooldownEntities = new HashMap<>();
+        private static final Map<LivingEntity, AtomicInteger> map = new HashMap<>();
+
+        private static void runConsumer(LivingEntity entity, Consumer<LivingEntity> consumer) {
+            map.keySet().stream().filter(e -> e.equals(entity)).findFirst().ifPresent(consumer);
+        }
 
         public static void define(LivingEntity entity) {
-            if (entity != null) hasCooldownEntities.put(entity, new AtomicInteger(0));
+            if (entity != null && !map.containsKey(entity)) map.put(entity, new AtomicInteger(0));
         }
         public static void set(LivingEntity entity, int cooldown) {
-            if (entity != null) hasCooldownEntities.get(entity).set(cooldown);
+            runConsumer(entity, e -> map.get(e).set(cooldown));
         }
         public static int get(LivingEntity entity) {
-            return entity != null ? hasCooldownEntities.get(entity).get() : -20000;
+            AtomicInteger atomic = new AtomicInteger(-20000);
+            runConsumer(entity, e -> atomic.set(map.get(e).get()));
+            return atomic.get();
         }
         public static void decrement(LivingEntity entity) {
-            if (entity != null) hasCooldownEntities.get(entity).decrementAndGet();
+            runConsumer(entity, e -> map.get(e).decrementAndGet());
         }
     }
 }
