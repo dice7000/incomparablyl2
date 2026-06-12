@@ -11,8 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -49,7 +49,7 @@ public class LastStandTrait extends MobTrait {
     }
 
     public static class CooldownData {
-        private static final Map<LivingEntity, AtomicInteger> map = new HashMap<>();
+        private static final Map<LivingEntity, AtomicInteger> map = new ConcurrentHashMap<>(); //CMEやめてね
 
         private static void runConsumer(LivingEntity entity, Consumer<LivingEntity> consumer) {
             map.keySet().stream().filter(e -> e.equals(entity)).findFirst().ifPresent(consumer);
